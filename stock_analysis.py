@@ -327,3 +327,35 @@ def ochl_percent_dist(data):
     data['l_percent'] = (data['Low'] - data['avg_all']) / data['avg_all'] * 100
 
     return data
+
+
+def binary_indicator(data):
+    data['binary_indicator'] = np.where(data['Color'] == 'g', 1, -1)
+
+    return data
+
+
+def color_probabilities(data):
+    colors = data['Color']
+    
+    numPairs = len(data) - 1
+    gg, gr = 0, 0
+    rg, rr = 0, 0
+
+    for x in range(len(data)-1):
+        if colors[x] == 'g':
+            if colors[x+1] == 'g': gg += 1
+            else: gr += 1
+        elif colors[x] == 'r':
+            if colors[x+1] == 'g': rg += 1
+            else: rr += 1
+
+    counts = [gg, gr, rg, rr]
+    probabilities = []
+
+
+    for sum in counts:
+        probabilities.append(sum / numPairs)
+
+    return probabilities
+
